@@ -8,40 +8,229 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
 
+// Create Virtual Routes
+
+const RegisterLazyImport = createFileRoute('/register')()
+const ProfilLazyImport = createFileRoute('/profil')()
+const LoginLazyImport = createFileRoute('/login')()
+const IndexLazyImport = createFileRoute('/')()
+const PublicUsersLazyImport = createFileRoute('/public/users')()
+const PublicTodosLazyImport = createFileRoute('/public/todos')()
+const PublicPostsLazyImport = createFileRoute('/public/posts')()
+const PublicCommentsLazyImport = createFileRoute('/public/comments')()
+
 // Create/Update Routes
+
+const RegisterLazyRoute = RegisterLazyImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/register.lazy').then((d) => d.Route))
+
+const ProfilLazyRoute = ProfilLazyImport.update({
+  id: '/profil',
+  path: '/profil',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/profil.lazy').then((d) => d.Route))
+
+const LoginLazyRoute = LoginLazyImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
+
+const IndexLazyRoute = IndexLazyImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const PublicUsersLazyRoute = PublicUsersLazyImport.update({
+  id: '/public/users',
+  path: '/public/users',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/public/users.lazy').then((d) => d.Route))
+
+const PublicTodosLazyRoute = PublicTodosLazyImport.update({
+  id: '/public/todos',
+  path: '/public/todos',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/public/todos.lazy').then((d) => d.Route))
+
+const PublicPostsLazyRoute = PublicPostsLazyImport.update({
+  id: '/public/posts',
+  path: '/public/posts',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/public/posts.lazy').then((d) => d.Route))
+
+const PublicCommentsLazyRoute = PublicCommentsLazyImport.update({
+  id: '/public/comments',
+  path: '/public/comments',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/public/comments.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {}
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/profil': {
+      id: '/profil'
+      path: '/profil'
+      fullPath: '/profil'
+      preLoaderRoute: typeof ProfilLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/public/comments': {
+      id: '/public/comments'
+      path: '/public/comments'
+      fullPath: '/public/comments'
+      preLoaderRoute: typeof PublicCommentsLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/public/posts': {
+      id: '/public/posts'
+      path: '/public/posts'
+      fullPath: '/public/posts'
+      preLoaderRoute: typeof PublicPostsLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/public/todos': {
+      id: '/public/todos'
+      path: '/public/todos'
+      fullPath: '/public/todos'
+      preLoaderRoute: typeof PublicTodosLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/public/users': {
+      id: '/public/users'
+      path: '/public/users'
+      fullPath: '/public/users'
+      preLoaderRoute: typeof PublicUsersLazyImport
+      parentRoute: typeof rootRoute
+    }
+  }
 }
 
 // Create and export the route tree
 
-export interface FileRoutesByFullPath {}
+export interface FileRoutesByFullPath {
+  '/': typeof IndexLazyRoute
+  '/login': typeof LoginLazyRoute
+  '/profil': typeof ProfilLazyRoute
+  '/register': typeof RegisterLazyRoute
+  '/public/comments': typeof PublicCommentsLazyRoute
+  '/public/posts': typeof PublicPostsLazyRoute
+  '/public/todos': typeof PublicTodosLazyRoute
+  '/public/users': typeof PublicUsersLazyRoute
+}
 
-export interface FileRoutesByTo {}
+export interface FileRoutesByTo {
+  '/': typeof IndexLazyRoute
+  '/login': typeof LoginLazyRoute
+  '/profil': typeof ProfilLazyRoute
+  '/register': typeof RegisterLazyRoute
+  '/public/comments': typeof PublicCommentsLazyRoute
+  '/public/posts': typeof PublicPostsLazyRoute
+  '/public/todos': typeof PublicTodosLazyRoute
+  '/public/users': typeof PublicUsersLazyRoute
+}
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
+  '/': typeof IndexLazyRoute
+  '/login': typeof LoginLazyRoute
+  '/profil': typeof ProfilLazyRoute
+  '/register': typeof RegisterLazyRoute
+  '/public/comments': typeof PublicCommentsLazyRoute
+  '/public/posts': typeof PublicPostsLazyRoute
+  '/public/todos': typeof PublicTodosLazyRoute
+  '/public/users': typeof PublicUsersLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: never
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/profil'
+    | '/register'
+    | '/public/comments'
+    | '/public/posts'
+    | '/public/todos'
+    | '/public/users'
   fileRoutesByTo: FileRoutesByTo
-  to: never
-  id: '__root__'
+  to:
+    | '/'
+    | '/login'
+    | '/profil'
+    | '/register'
+    | '/public/comments'
+    | '/public/posts'
+    | '/public/todos'
+    | '/public/users'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/profil'
+    | '/register'
+    | '/public/comments'
+    | '/public/posts'
+    | '/public/todos'
+    | '/public/users'
   fileRoutesById: FileRoutesById
 }
 
-export interface RootRouteChildren {}
+export interface RootRouteChildren {
+  IndexLazyRoute: typeof IndexLazyRoute
+  LoginLazyRoute: typeof LoginLazyRoute
+  ProfilLazyRoute: typeof ProfilLazyRoute
+  RegisterLazyRoute: typeof RegisterLazyRoute
+  PublicCommentsLazyRoute: typeof PublicCommentsLazyRoute
+  PublicPostsLazyRoute: typeof PublicPostsLazyRoute
+  PublicTodosLazyRoute: typeof PublicTodosLazyRoute
+  PublicUsersLazyRoute: typeof PublicUsersLazyRoute
+}
 
-const rootRouteChildren: RootRouteChildren = {}
+const rootRouteChildren: RootRouteChildren = {
+  IndexLazyRoute: IndexLazyRoute,
+  LoginLazyRoute: LoginLazyRoute,
+  ProfilLazyRoute: ProfilLazyRoute,
+  RegisterLazyRoute: RegisterLazyRoute,
+  PublicCommentsLazyRoute: PublicCommentsLazyRoute,
+  PublicPostsLazyRoute: PublicPostsLazyRoute,
+  PublicTodosLazyRoute: PublicTodosLazyRoute,
+  PublicUsersLazyRoute: PublicUsersLazyRoute,
+}
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
@@ -52,7 +241,40 @@ export const routeTree = rootRoute
   "routes": {
     "__root__": {
       "filePath": "__root.jsx",
-      "children": []
+      "children": [
+        "/",
+        "/login",
+        "/profil",
+        "/register",
+        "/public/comments",
+        "/public/posts",
+        "/public/todos",
+        "/public/users"
+      ]
+    },
+    "/": {
+      "filePath": "index.lazy.jsx"
+    },
+    "/login": {
+      "filePath": "login.lazy.jsx"
+    },
+    "/profil": {
+      "filePath": "profil.lazy.jsx"
+    },
+    "/register": {
+      "filePath": "register.lazy.jsx"
+    },
+    "/public/comments": {
+      "filePath": "public/comments.lazy.jsx"
+    },
+    "/public/posts": {
+      "filePath": "public/posts.lazy.jsx"
+    },
+    "/public/todos": {
+      "filePath": "public/todos.lazy.jsx"
+    },
+    "/public/users": {
+      "filePath": "public/users.lazy.jsx"
     }
   }
 }
