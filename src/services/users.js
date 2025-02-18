@@ -1,6 +1,6 @@
-export const getUser = async () => {
+export const getUser = async (page = 1, perPage = 50) => {
     const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/public/v2/users`,
+        `${import.meta.env.VITE_API_URL}/public/v2/users?page=${page}&per_page=${perPage}`,
         {
             headers: {
                 Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`
@@ -12,12 +12,31 @@ export const getUser = async () => {
     console.log("Fetched Result:", result); 
 
     if (!response.ok) {
-        throw new Error(result?.message);
+        throw new Error(result?.message || "Failed to fetch users");
     }
 
     return result;
 };
 
+export const getUserById = async (id) => {
+    const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/public/v2/users/${id}`,
+        {
+            headers: {
+                Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`,
+            },
+        }
+    );
+
+    const result = await response.json();
+    console.log('Fetched Result:', result);
+
+    if (!response.ok) {
+        throw new Error(result?.message || 'Failed to fetch user');
+    }
+
+    return result;
+};
 
 export const getUserByEmail = async (name, email) => {
     const response = await fetch(
@@ -98,3 +117,23 @@ export const updateUser = async (request) => {
         message: result?.message || "User updated successfully!",
     };
 };
+
+export const deleteUser = async (id) => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/public/v2/users/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`,
+        },
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text(); 
+        console.error("Error response:", errorText);
+        throw new Error(`Failed to delete user: ${errorText || response.statusText}`);
+    }
+
+    return response.status === 204 ? {} : response.json(); 
+};
+

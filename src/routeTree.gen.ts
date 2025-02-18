@@ -17,7 +17,6 @@ import { Route as rootRoute } from './routes/__root'
 // Create Virtual Routes
 
 const RegisterLazyImport = createFileRoute('/register')()
-const ProfilLazyImport = createFileRoute('/profil')()
 const LoginLazyImport = createFileRoute('/login')()
 const IndexLazyImport = createFileRoute('/')()
 const PublicUsersLazyImport = createFileRoute('/public/users')()
@@ -32,12 +31,6 @@ const RegisterLazyRoute = RegisterLazyImport.update({
   path: '/register',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/register.lazy').then((d) => d.Route))
-
-const ProfilLazyRoute = ProfilLazyImport.update({
-  id: '/profil',
-  path: '/profil',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/profil.lazy').then((d) => d.Route))
 
 const LoginLazyRoute = LoginLazyImport.update({
   id: '/login',
@@ -95,13 +88,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginLazyImport
       parentRoute: typeof rootRoute
     }
-    '/profil': {
-      id: '/profil'
-      path: '/profil'
-      fullPath: '/profil'
-      preLoaderRoute: typeof ProfilLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -145,7 +131,6 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/login': typeof LoginLazyRoute
-  '/profil': typeof ProfilLazyRoute
   '/register': typeof RegisterLazyRoute
   '/public/comments': typeof PublicCommentsLazyRoute
   '/public/posts': typeof PublicPostsLazyRoute
@@ -156,7 +141,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/login': typeof LoginLazyRoute
-  '/profil': typeof ProfilLazyRoute
   '/register': typeof RegisterLazyRoute
   '/public/comments': typeof PublicCommentsLazyRoute
   '/public/posts': typeof PublicPostsLazyRoute
@@ -168,7 +152,6 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/login': typeof LoginLazyRoute
-  '/profil': typeof ProfilLazyRoute
   '/register': typeof RegisterLazyRoute
   '/public/comments': typeof PublicCommentsLazyRoute
   '/public/posts': typeof PublicPostsLazyRoute
@@ -181,7 +164,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
-    | '/profil'
     | '/register'
     | '/public/comments'
     | '/public/posts'
@@ -191,7 +173,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
-    | '/profil'
     | '/register'
     | '/public/comments'
     | '/public/posts'
@@ -201,7 +182,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/login'
-    | '/profil'
     | '/register'
     | '/public/comments'
     | '/public/posts'
@@ -213,7 +193,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   LoginLazyRoute: typeof LoginLazyRoute
-  ProfilLazyRoute: typeof ProfilLazyRoute
   RegisterLazyRoute: typeof RegisterLazyRoute
   PublicCommentsLazyRoute: typeof PublicCommentsLazyRoute
   PublicPostsLazyRoute: typeof PublicPostsLazyRoute
@@ -224,7 +203,6 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   LoginLazyRoute: LoginLazyRoute,
-  ProfilLazyRoute: ProfilLazyRoute,
   RegisterLazyRoute: RegisterLazyRoute,
   PublicCommentsLazyRoute: PublicCommentsLazyRoute,
   PublicPostsLazyRoute: PublicPostsLazyRoute,
@@ -244,7 +222,6 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/login",
-        "/profil",
         "/register",
         "/public/comments",
         "/public/posts",
@@ -257,9 +234,6 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.lazy.jsx"
-    },
-    "/profil": {
-      "filePath": "profil.lazy.jsx"
     },
     "/register": {
       "filePath": "register.lazy.jsx"

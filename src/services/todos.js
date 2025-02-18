@@ -1,6 +1,6 @@
-export const getTodos = async () => {
+export const getTodos = async (page = 1, perPage = 50) => {
     const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/public/v2/todos`,
+        `${import.meta.env.VITE_API_URL}/public/v2/todos?page=${page}&per_page=${perPage}`,
         {
             headers: {
                 Authorization: `${import.meta.env.VITE_ACCESS_TOKEN}`
@@ -12,7 +12,7 @@ export const getTodos = async () => {
     console.log("Fetched Result:", result);
 
     if (!response.ok) {
-        throw new Error(result?.message);
+        throw new Error(result?.message || "Failed to fetch todos");
     }
 
     return result;

@@ -1,0 +1,22 @@
+.auth-container {
+    background: url('../assets/gym-background.jpg') no-repeat center center/cover;
+    height: 100vh;
+  }
+  
+  .auth-card { 
+    width: 350px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 10px;
+  }
+  
+  .auth-card h2 {
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  button {
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  

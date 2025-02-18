@@ -1,9 +1,14 @@
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { Table, Form, InputGroup, Pagination, Container, Row, Col } from 'react-bootstrap';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { Table, Form, InputGroup, Pagination, Container, Row, Col, Button, Modal } from 'react-bootstrap';
 import { AppNavbar, Sidebar } from '../../components/navbar';
-import { getPosts } from '../../services/posts';
+import { toast } from 'react-toastify';
+import { getPosts, 
+  createPost as createPostService 
+} from '../../services/posts';
+import PaginationComponent from '../../components/pagination';
+import SearchBar from '../../components/SearchBar';
 
 export const Route = createLazyFileRoute('/public/posts')({
   component: PostsTable,
@@ -13,8 +18,14 @@ function PostsTable() {
   const [search, setSearch] = useState('');
   const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'asc' });
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [itemsPerPage, setItemsPerPage] = useState(5); 
   const navigate = useNavigate();
+
+  const [show, setShow] = useState(false);
+  const [formData, setFormData] = useState({ title: '', body: '' });
+
+  const handleShow = () => setShow(true);
+  const handleClose = () => setShow(false);
 
   useEffect(() => {
     const user = localStorage.getItem('user');
@@ -30,8 +41,18 @@ function PostsTable() {
       return response;
     },
   });
-
   
+  const { mutate: createPost } = useMutation({
+    mutationFn: createPostService,
+    onSuccess: () => {
+        toast.success('Post created successfully');
+        handleClose();
+        setFormData({ title: '', body: '' });
+    },
+    onError: (error) => {
+        toast.error(error.message || 'Failed to create post');
+    },
+  });
 
   const sortedPosts = Array.isArray(postsList) ? [...postsList].sort((a, b) => {
     if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1;
@@ -45,30 +66,57 @@ function PostsTable() {
     post.body.toLowerCase().includes(search.toLowerCase())
   );
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentPosts = filteredPosts.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredPosts.length / itemsPerPage);
+    // Hitung total halaman berdasarkan itemsPerPage yang dipilih
+    const totalPages = Math.ceil(filteredPosts.length / itemsPerPage);
+
+    // Hitung indeks awal dan akhir data yang akan ditampilkan
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentPosts = filteredPosts.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handleItemsPerPageChange = (value) => {
+    setItemsPerPage(value);
+    setCurrentPage(1); 
+  };
+
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.id) {
+      toast.error("User ID tidak ditemukan. Silakan login kembali.");
+      return;
+    }
+    const newPost = {
+      title: formData.title,
+      body: formData.body,
+      user_id: user.id,
+    };
+    createPost(newPost);
+    console.log(newPost);
+  };
+  
 
   return (
-    <Container fluid>   
-      <Row>
-        <Col md={2} className="p-0">
-          <Sidebar />
+    <>
+      <Container fluid>
+        <Row>
+          <Col md={2} className="p-0">
+            <Sidebar />
         </Col>
-        <Col md={10} className="p-0">
+        <Col md={10} className="p-0 px-3">
           <AppNavbar />
-          <h3>Posts List</h3>
-          <InputGroup className="mb-3">
-            <Form.Control
-              type="text"
-              placeholder="Search by title"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </InputGroup>
+            <div className="d-flex justify-content-between align-items-center">
+                <h3>Posts List</h3>
+                <Button variant="primary" onClick={handleShow}>Create Post</Button>
+            </div>
+          <SearchBar search={search} setSearch={setSearch} />
           <Table striped bordered hover responsive>
-            <thead>
+            <thead style={{ textAlign: 'center' }}>
               <tr>
                 <th onClick={() => setSortConfig({ key: 'id', direction: sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>
                   ID {sortConfig.key === 'id' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
@@ -89,15 +137,57 @@ function PostsTable() {
               ))}
             </tbody>
           </Table>
-          <Pagination>
-            {[...Array(totalPages).keys()].map((number) => (
-              <Pagination.Item key={number + 1} active={number + 1 === currentPage} onClick={() => setCurrentPage(number + 1)}>
-                {number + 1}
-              </Pagination.Item>
-            ))}
-          </Pagination>
+          <PaginationComponent 
+            currentPage={currentPage} 
+            totalPages={totalPages} 
+            itemsPerPage={itemsPerPage} 
+            onPageChange={setCurrentPage} 
+            onItemsPerPageChange={handleItemsPerPageChange} 
+          />
         </Col>
       </Row>
-    </Container>
+      </Container>
+       {/* Modal Form */}
+      <Modal show={show} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Create New Post</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label>Title</Form.Label>
+              <Form.Control
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Body</Form.Label>
+              <Form.Control
+                as="textarea"
+                name="body"
+                rows={3}
+                value={formData.body}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+
+            <div className="d-flex justify-content-end">
+              <Button variant="secondary" onClick={handleClose} className="me-2">
+                Cancel
+              </Button>
+              <Button variant="primary" type="submit" disabled={isLoading}>
+                {isLoading ? "Submitting..." : "Submit"}
+              </Button>
+            </div>
+          </Form>
+        </Modal.Body>
+      </Modal>
+    </>
   );
 }

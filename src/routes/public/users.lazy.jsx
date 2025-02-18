@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Table, Form, InputGroup, Button, Pagination, Container, Row, Col } from 'react-bootstrap';
 import { AppNavbar, Sidebar } from '../../components/navbar';
 import { getUser } from '../../services/users';
+import PaginationComponent from '../../components/pagination';
+import SearchBar from '../../components/SearchBar';
 export const Route = createLazyFileRoute('/public/users')({
   component: UserTable,
 })
@@ -12,7 +14,7 @@ function UserTable() {
   const [search, setSearch] = useState('');
   const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'asc' });
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,6 +31,7 @@ function UserTable() {
       return response;
     },
   });
+  
   
 
   // Sorting function
@@ -49,31 +52,28 @@ function UserTable() {
   );
 
   // Pagination
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentUsers = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+
+  const handleItemsPerPageChange = (value) => {
+    setItemsPerPage(value);
+    setCurrentPage(1); 
+  };
 
   return (
-    <>
-      <Container fluid>
+    <Container fluid>
         <Row>
           <Col md={2} className="p-0">
             <Sidebar />
           </Col>
-          <Col md={10} className="p-0">
+          <Col md={10} className="p-0 px-3">
             <AppNavbar />
             <h3>Users List</h3>
-            <InputGroup className="mb-3">
-              <Form.Control
-                type="text"
-                placeholder="Search by name or email"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </InputGroup>
-            <Table striped bordered hover responsive>
-              <thead>
+            <SearchBar search={search} setSearch={setSearch} />
+            <Table striped bordered hover responsive className="text-center">
+              <thead >
                 <tr>
                   <th onClick={() => setSortConfig({ key: 'id', direction: sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>
                     ID {sortConfig.key === 'id' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
@@ -92,22 +92,45 @@ function UserTable() {
                     <td>{user.id}</td>
                     <td>{user.name}</td>
                     <td>{user.email}</td>
-                    <td>{user.gender}</td>
-                    <td>{user.status}</td>
+                    <td>
+                      {user.gender === 'male' ? (
+                        <>
+                          <i className="bi bi-gender-male" style={{ color: 'blue' }}></i> Male
+                        </>
+                      ) : user.gender === 'female' ? (
+                        <>
+                          <i className="bi bi-gender-female" style={{ color: 'pink' }}></i> Female
+                        </>
+                      ) : (
+                        '-'
+                      )}
+                    </td>
+                    <td>
+                      {user.status === 'active' ? (
+                        <>
+                          <i className="bi bi-check-circle-fill text-success"></i> Active
+                        </>
+                      ) : user.status === 'inactive' ? (
+                        <>
+                          <i className="bi bi-x-circle-fill text-danger"></i> Inactive
+                        </>
+                      ) : (
+                        '-'
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </Table>
-            <Pagination>
-              {[...Array(totalPages).keys()].map((number) => (
-                <Pagination.Item key={number + 1} active={number + 1 === currentPage} onClick={() => setCurrentPage(number + 1)}>
-                  {number + 1}
-                </Pagination.Item>
-              ))}
-            </Pagination>
+            <PaginationComponent 
+              currentPage={currentPage} 
+              totalPages={totalPages} 
+              onPageChange={setCurrentPage} 
+              itemsPerPage={itemsPerPage} 
+              onItemsPerPageChange={handleItemsPerPageChange} 
+            />
           </Col>
         </Row>
-      </Container>
-    </>
+    </Container>
   );
 }
