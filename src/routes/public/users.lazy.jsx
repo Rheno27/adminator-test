@@ -57,48 +57,56 @@ function UserTable() {
   return (
     <>
       <Container fluid>
-        <h3>Users List</h3>
-        <InputGroup className="mb-3">
-          <Form.Control
-            type="text"
-            placeholder="Search by name or email"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </InputGroup>
-        <Table striped bordered hover responsive>
-          <thead>
-            <tr>
-              <th onClick={() => setSortConfig({ key: 'id', direction: sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>
-                ID {sortConfig.key === 'id' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
-              </th>
-              <th onClick={() => setSortConfig({ key: 'name', direction: sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>
-                Name {sortConfig.key === 'name' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
-              </th>
-              <th>Email</th>
-              <th>Gender</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentUsers.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.gender}</td>
-                <td>{user.status}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-        <Pagination>
-          {[...Array(totalPages).keys()].map((number) => (
-            <Pagination.Item key={number + 1} active={number + 1 === currentPage} onClick={() => setCurrentPage(number + 1)}>
-              {number + 1}
-            </Pagination.Item>
-          ))}
-        </Pagination>
+        <Row>
+          <Col md={2} className="p-0">
+            <Sidebar />
+          </Col>
+          <Col md={10} className="p-0">
+            <AppNavbar />
+            <h3>Users List</h3>
+            <InputGroup className="mb-3">
+              <Form.Control
+                type="text"
+                placeholder="Search by name or email"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </InputGroup>
+            <Table striped bordered hover responsive>
+              <thead>
+                <tr>
+                  <th onClick={() => setSortConfig({ key: 'id', direction: sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>
+                    ID {sortConfig.key === 'id' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
+                  </th>
+                  <th onClick={() => setSortConfig({ key: 'name', direction: sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>
+                    Name {sortConfig.key === 'name' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
+                  </th>
+                  <th>Email</th>
+                  <th>Gender</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentUsers.map((user) => (
+                  <tr key={user.id}>
+                    <td>{user.id}</td>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.gender}</td>
+                    <td>{user.status}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <Pagination>
+              {[...Array(totalPages).keys()].map((number) => (
+                <Pagination.Item key={number + 1} active={number + 1 === currentPage} onClick={() => setCurrentPage(number + 1)}>
+                  {number + 1}
+                </Pagination.Item>
+              ))}
+            </Pagination>
+          </Col>
+        </Row>
       </Container>
     </>
   );

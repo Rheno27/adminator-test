@@ -52,52 +52,60 @@ function CommentsTable() {
 
   return (
     <Container fluid>
-      <h3>Comments List</h3>
-      <InputGroup className="mb-3">
-        <Form.Control
-          type="text"
-          placeholder="Search by id, post_id, name, email, body"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </InputGroup>
-      <Table striped bordered hover responsive>
-        <thead>
-          <tr>
-            <th onClick={() => setSortConfig({ key: 'id', direction: sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>
-              ID {sortConfig.key === 'id' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
-            </th>
-            <th onClick={() => setSortConfig({ key: 'post_id', direction: sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>
-              Post ID {sortConfig.key === 'post_id' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
-            </th>
-            <th onClick={() => setSortConfig({ key: 'name', direction: sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>
-              Name {sortConfig.key === 'name' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
-            </th>
-            <th onClick={() => setSortConfig({ key: 'email', direction: sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>
-              Email {sortConfig.key === 'email' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
-            </th>
-            <th>Body</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentComments.map((comment) => (
-            <tr key={comment.id}>
-              <td>{comment.id}</td>
-              <td>{comment.post_id}</td>
-              <td>{comment.name}</td>
-              <td>{comment.email}</td>
-              <td>{comment.body}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      <Pagination>
-        {[...Array(totalPages).keys()].map((number) => (
-          <Pagination.Item key={number + 1} active={number + 1 === currentPage} onClick={() => setCurrentPage(number + 1)}>
-            {number + 1}
-          </Pagination.Item>
-        ))}
-      </Pagination>
+      <Row>
+        <Col md={2} className="p-0">
+          <Sidebar />
+        </Col>
+        <Col md={10} className="p-0">
+          <AppNavbar />
+          <h3>Comments List</h3>
+          <InputGroup className="mb-3">
+            <Form.Control
+              type="text"
+              placeholder="Search by id, post_id, name, email, body"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </InputGroup>
+          <Table striped bordered hover responsive>
+            <thead>
+              <tr>
+                <th onClick={() => setSortConfig({ key: 'id', direction: sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>
+                  ID {sortConfig.key === 'id' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
+                </th>
+                <th onClick={() => setSortConfig({ key: 'post_id', direction: sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>
+                  Post ID {sortConfig.key === 'post_id' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
+                </th>
+                <th onClick={() => setSortConfig({ key: 'name', direction: sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>
+                  Name {sortConfig.key === 'name' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
+                </th>
+                <th onClick={() => setSortConfig({ key: 'email', direction: sortConfig.direction === 'asc' ? 'desc' : 'asc' })}>
+                  Email {sortConfig.key === 'email' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
+                </th>
+                <th>Body</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentComments.map((comment) => (
+                <tr key={comment.id}>
+                  <td>{comment.id}</td>
+                  <td>{comment.post_id}</td>
+                  <td>{comment.name}</td>
+                  <td>{comment.email}</td>
+                  <td>{comment.body}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Pagination>
+            {[...Array(totalPages).keys()].map((number) => (
+              <Pagination.Item key={number + 1} active={number + 1 === currentPage} onClick={() => setCurrentPage(number + 1)}>
+                {number + 1}
+              </Pagination.Item>
+            ))}
+          </Pagination>
+        </Col>
+      </Row>
     </Container>
   );
 }
