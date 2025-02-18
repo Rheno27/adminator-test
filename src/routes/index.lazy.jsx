@@ -18,8 +18,16 @@ function RouteComponent() {
 
   return (
     <>
-      <Container fluid>
-      </Container>
+      <Row>
+        <Col md={2} className="p-0">
+          <Sidebar />
+        </Col>
+        <Col md={10} className="p-0">
+          <AppNavbar />
+          <Container fluid>
+          </Container>
+        </Col>
+      </Row>
     </>
   );
 }
