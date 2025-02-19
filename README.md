@@ -1,4 +1,4 @@
-# 🎧 Adminator - Admin Panel
+# 🏋️‍♂️ Adminator - Admin Panel
 
 Adminator adalah proyek Admin Panel yang dikembangkan menggunakan teknologi modern untuk memudahkan pengelolaan data. Anda dapat menjalankan proyek ini secara lokal atau mengakses versi live-nya di:
 
@@ -66,9 +66,7 @@ npm start
 - Anda menggunakan **Node.js** versi terbaru
 - Token API sudah diatur di `.env`
 
-💡 Untuk kontribusi atau pelaporan bug, silakan buat _issue_ atau _pull request_ di repository ini!
-
 ---
 
-✨ Selamat menggunakan **Adminator Admin Panel**! 🚀
+✨ Selamat menggunakan **Adminator**! 🚀
 
