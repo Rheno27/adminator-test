@@ -66,10 +66,7 @@ function PostsTable() {
     post.body.toLowerCase().includes(search.toLowerCase())
   );
 
-    // Hitung total halaman berdasarkan itemsPerPage yang dipilih
     const totalPages = Math.ceil(filteredPosts.length / itemsPerPage);
-
-    // Hitung indeks awal dan akhir data yang akan ditampilkan
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentPosts = filteredPosts.slice(indexOfFirstItem, indexOfLastItem);

@@ -32,8 +32,6 @@ function UserTable() {
     },
   });
   
-  
-
   // Sorting function
   const sortedUsers = Array.isArray(usersList) ? [...usersList].sort((a, b) => {
     if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1;
@@ -41,7 +39,6 @@ function UserTable() {
     return 0;
   }) : [];
   
-
   // Filtering based on search input
   const filteredUsers = sortedUsers.filter((userList) =>
     userList.id.toString().includes(search) ||

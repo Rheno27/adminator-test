@@ -7,10 +7,7 @@ export const getUser = async (page = 1, perPage = 50) => {
             },
         }
     );
-
     const result = await response.json();
-    console.log("Fetched Result:", result); 
-
     if (!response.ok) {
         throw new Error(result?.message || "Failed to fetch users");
     }
@@ -27,14 +24,10 @@ export const getUserById = async (id) => {
             },
         }
     );
-
     const result = await response.json();
-    console.log('Fetched Result:', result);
-
     if (!response.ok) {
         throw new Error(result?.message || 'Failed to fetch user');
     }
-
     return result;
 };
 
@@ -47,10 +40,7 @@ export const getUserByEmail = async (name, email) => {
         },
     }
     );
-
     const result = await response.json();
-    console.log('Fetched Result:', result);
-
     if (!response.ok) {
         throw new Error(result?.message || 'Failed to fetch user');
     }
@@ -58,7 +48,6 @@ export const getUserByEmail = async (name, email) => {
     if (!Array.isArray(result) || result.length === 0) {
         throw new Error('User tidak ditemukan!');
     }
-
     return result[0];
 };
 
@@ -79,8 +68,6 @@ export const createUser = async (request) => {
         },
         body: JSON.stringify(request),
     });
-    console.log("access token", import.meta.env.ACCESS_TOKEN);
-    console.log("response", response);
 
     if (!response.ok) {
         throw new Error(response?.message || "Failed to create user");
@@ -130,7 +117,6 @@ export const deleteUser = async (id) => {
 
     if (!response.ok) {
         const errorText = await response.text(); 
-        console.error("Error response:", errorText);
         throw new Error(`Failed to delete user: ${errorText || response.statusText}`);
     }
 

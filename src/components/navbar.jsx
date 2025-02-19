@@ -15,7 +15,6 @@ function Sidebar() {
     const [showModal, setShowModal] = useState(false);
     const [confirmText, setConfirmText] = useState("");
 
-    // Menggunakan useMutation untuk menghapus user
     const mutation = useMutation({
         mutationFn: deleteUserService,
         onSuccess: () => {
@@ -26,6 +25,7 @@ function Sidebar() {
         },
         onError: (error) => {
             console.error("Failed to delete account:", error);
+            toast.error('Failed to delete account');
         }
     });
 
@@ -34,13 +34,11 @@ function Sidebar() {
             mutation.mutate(user.id);
             setShowModal(false);
         }
-
     };
 
     const handleLogout = () => {
         localStorage.removeItem("user");
         window.location.reload();
-
     };
 
     return (
@@ -78,7 +76,6 @@ function Sidebar() {
                     <i className="bi bi-building-check me-2"></i>List Todos
                 </Nav.Link>
 
-                {/* Logout Button */}
                 {user ? (
                     <>
                         <Nav.Link as="button" onClick={handleLogout} className="text-danger mt-3">
@@ -105,7 +102,6 @@ function Sidebar() {
                 )}
             </Nav>
 
-            {/* Modal Konfirmasi Delete Account */}
             <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Confirm Deletion</Modal.Title>

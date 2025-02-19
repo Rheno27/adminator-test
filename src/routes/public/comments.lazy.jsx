@@ -44,7 +44,7 @@ function CommentsTable() {
   // Extract post titles
   const postTitleMap = postQueries.reduce((acc, query, index) => {
     if (query.data) {
-      acc[commentsList[index].post_id] = query.data.title; // Simpan berdasarkan post_id
+      acc[commentsList[index].post_id] = query.data.title; 
     }
     return acc;
   }, {});

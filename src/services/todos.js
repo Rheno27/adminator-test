@@ -9,7 +9,6 @@ export const getTodos = async (page = 1, perPage = 50) => {
     );
 
     const result = await response.json();
-    console.log("Fetched Result:", result);
 
     if (!response.ok) {
         throw new Error(result?.message || "Failed to fetch todos");
