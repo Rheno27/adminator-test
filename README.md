@@ -36,7 +36,7 @@ VITE_ACCESS_TOKEN=Bearer YOUR_ACCESS_TOKEN
 **Contoh `.env` setelah diisi:**
 ```bash
 VITE_API_URL=https://gorest.co.in
-VITE_ACCESS_TOKEN=Bearer 12345
+VITE_ACCESS_TOKEN=12345abcd
 ```
 
 ### ▶️ 4. Menjalankan Proyek
