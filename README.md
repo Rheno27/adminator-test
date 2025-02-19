@@ -44,7 +44,7 @@ Untuk menjalankan proyek dalam mode pengembangan, gunakan:
 ```bash
 npm run dev
 ```
-Aplikasi akan berjalan di: **`http://localhost:3000/`**
+Aplikasi akan berjalan di: **`http://localhost:5173/`**
 
 ### 🏩 5. Build dan Jalankan dalam Mode Production
 ```bash
