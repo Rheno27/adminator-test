@@ -1,8 +1,8 @@
-# 🏋️‍♂️ Adminator - Admin Panel
+# 🏋️‍♂️ ADMINATOR
 
 Adminator adalah proyek Admin Panel yang dikembangkan menggunakan teknologi modern untuk memudahkan pengelolaan data. Anda dapat menjalankan proyek ini secara lokal atau mengakses versi live-nya di:
 
-🔗 **Live Demo:** [Adminator Test](https://adminator-test.vercel.app/)
+🔗 **Live Demo:** [Adminator](https://adminator-test.vercel.app/)
 
 ## 🚀 Cara Menjalankan Secara Lokal
 
@@ -46,11 +46,23 @@ npm run dev
 ```
 Aplikasi akan berjalan di: **`http://localhost:3000/`**
 
-### 🏙️ 5. Build dan Jalankan dalam Mode Production
+### 🏩 5. Build dan Jalankan dalam Mode Production
 ```bash
 npm run build
 npm start
 ```
+
+## 🔐 Cara Login
+Anda bisa masuk menggunakan akun yang tersedia di API GoRest dengan mengikuti langkah-langkah berikut:
+1. **Gunakan User yang Sudah Ada:**
+   - Buka 🌐 [GoRest Users](https://gorest.co.in/public/v2/users)
+   - Pilih salah satu user yang ada
+   - Gunakan email dari user tersebut untuk login di aplikasi
+
+2. **Atau Registrasi Akun Baru:**
+   - Pergi ke halaman registrasi pada aplikasi
+   - Buat akun baru dengan mengisi data yang diperlukan
+   - Gunakan akun tersebut untuk login
 
 ## 🛠️ Teknologi yang Digunakan
 - ⚛️ **React** – Library untuk membangun UI interaktif
